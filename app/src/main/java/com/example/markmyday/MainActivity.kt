@@ -1,20 +1,32 @@
 package com.example.markmyday
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.room.Room
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : ComponentActivity() {
+    private val viewModel: AttendanceViewModel by viewModels {
+        AttendanceViewModelFactory(
+            Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java, "attendance-database"
+            ).build().attendanceDao()
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        setContent {
+            MarkMyDayTheme {
+                Surface(color = MaterialTheme.colors.background) {
+                    AttendanceTrackerScreen(viewModel)
+                }
+            }
         }
     }
 }
