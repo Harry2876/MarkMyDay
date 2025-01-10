@@ -1,19 +1,53 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:padding="16dp">
 
+    <!-- com.example.markmyday.Attendance Progress -->
     <TextView
+        android:id="@+id/tvAttendanceProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Attendance Progress"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="false"
+        android:max="87" />
+
+    <!-- Marked Days and com.example.markmyday.Attendance Buttons -->
+    <TextView
+        android:id="@+id/tvAttendanceDays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Marked Days: 0 / 87"
+        android:layout_below="@id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnMarkAttendance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mark Attendance"
+        android:layout_below="@id/tvAttendanceDays"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnRemoveAttendance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove Attendance"
+        android:layout_below="@id/btnMarkAttendance"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+</RelativeLayout>
