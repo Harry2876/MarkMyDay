@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         tvAttendanceDays = findViewById(R.id.tvAttendanceDays)
         val btnMarkAttendance: Button = findViewById(R.id.btnMarkAttendance)
         val btnRemoveAttendance: Button = findViewById(R.id.btnRemoveAttendance)
+        val btnTest:Button = findViewById(R.id.test_button)
 
         // Initialize Database
         val database = AttendanceDatabase.getDatabase(this)
@@ -52,8 +55,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Schedule daily reminders
-        scheduleDailyNotifications()
+
+
+        btnTest.setOnClickListener {
+            // Schedule daily reminders
+            scheduleDailyNotifications()
+        }
 
         // Set click listeners
         btnMarkAttendance.setOnClickListener { markAttendance() }
@@ -97,7 +104,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun scheduleDailyNotifications() {
-        val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(1, TimeUnit.SECONDS).build()
+        val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>().build()
         WorkManager.getInstance(this).enqueue(workRequest)
     }
 

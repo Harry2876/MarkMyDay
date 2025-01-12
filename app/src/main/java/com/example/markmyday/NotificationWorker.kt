@@ -44,7 +44,7 @@ class NotificationWorker(context: Context, parameters: WorkerParameters) : Worke
             action = "com.example.markmyday.ACTION_MARK_ATTENDANCE"
         }
 
-        val markAttendancePendingIntent : PendingIntent = PendingIntent.getBroadcast(applicationContext, 0, markAttendanceIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val markAttendancePendingIntent : PendingIntent = PendingIntent.getBroadcast(applicationContext, 0, markAttendanceIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val remoteViews = RemoteViews(applicationContext.packageName, R.layout.custom_notification)
         remoteViews.setOnClickPendingIntent(R.id.notification_button, markAttendancePendingIntent)
