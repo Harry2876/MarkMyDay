@@ -1,10 +1,14 @@
 package com.example.markmyday
 
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -16,6 +20,9 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
+
+    private val REQUEST_CODE_NOTIFICATION_PERMISSION = 1
+
 
     private lateinit var attendanceDao: AttendanceDao
     private lateinit var progressBar: ProgressBar
@@ -37,6 +44,13 @@ class MainActivity : AppCompatActivity() {
         // Initialize Database
         val database = AttendanceDatabase.getDatabase(this)
         attendanceDao = database.attendanceDao()
+
+        // Request notification permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE_NOTIFICATION_PERMISSION)
+            }
+        }
 
         // Schedule daily reminders
         scheduleDailyNotifications()
@@ -78,12 +92,12 @@ class MainActivity : AppCompatActivity() {
             }
             progressBar.progress = markedDaysCount
             tvAttendanceDays.text = "Marked Days: $markedDaysCount / $totalDays"
-            tvAttendanceProgress.text = "${(markedDaysCount.toFloat() / totalDays * 100).toInt()}% com.example.markmyday.Attendance"
+            tvAttendanceProgress.text = "${(markedDaysCount.toFloat() / totalDays * 100).toInt()}% Attendance"
         }
     }
 
     private fun scheduleDailyNotifications() {
-        val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(1, TimeUnit.DAYS).build()
+        val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(1, TimeUnit.SECONDS).build()
         WorkManager.getInstance(this).enqueue(workRequest)
     }
 
